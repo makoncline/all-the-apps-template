@@ -28,6 +28,7 @@ Repo-specific notes for future agents working in this workspace.
 
 ## iOS / Expo
 
+- For a brand new repo intended to run in Expo Go on a physical iPhone, keep `apps/mobile` on the current Expo SDK. iOS devices only support the latest Expo Go from the App Store; you cannot install an older Expo Go build on-device.
 - Some Macs will not have an iOS simulator runtime installed. If `simctl` shows no usable iOS runtime, install it first:
   - `xcodebuild -downloadPlatform iOS`
 - For the iOS simulator, use:
