@@ -7,6 +7,11 @@
   },
   "scripts": {
     "dev": "turbo run dev --parallel --filter=@hello/server --filter=@hello/web",
+    "web": "node ./scripts/run-surface.mjs web",
+    "mac": "node ./scripts/run-surface.mjs mac",
+    "ios": "node ./scripts/run-surface.mjs ios",
+    "cli": "node ./scripts/run-surface.mjs cli",
+    "server": "pnpm --filter @hello/server dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",

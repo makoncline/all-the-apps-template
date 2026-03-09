@@ -8,6 +8,9 @@
   },
   "scripts": {
     "dev": "tsx src/index.ts",
+    "create": "tsx src/index.ts create",
+    "list": "tsx src/index.ts list",
+    "health": "tsx src/index.ts health",
     "build": "tsc -p tsconfig.json",
     "lint": "eslint src --ext .ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",

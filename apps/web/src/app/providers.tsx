@@ -1,12 +1,12 @@
 "use client";
 
 import { QueryClientProvider } from "@tanstack/react-query";
-import type { ReactNode } from "react";
+import type React from "react";
 
 import { queryClient } from "../lib/queryClient";
 
 interface ProvidersProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export const Providers = ({ children }: ProvidersProps) => (

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
+import type React from "react";
 
 import { Providers } from "./providers";
 import "./globals.css";
@@ -9,14 +9,10 @@ export const metadata: Metadata = {
   description: "Shared greetings app across web, mobile, desktop, CLI, and MCP."
 };
 
-interface RootLayoutProps {
-  children: ReactNode;
-}
-
-const RootLayout = ({ children }: RootLayoutProps) => (
+const RootLayout = ({ children }: LayoutProps<"/">) => (
   <html lang="en">
     <body>
-      <Providers>{children}</Providers>
+      <Providers>{children as React.ReactNode}</Providers>
     </body>
   </html>
 );

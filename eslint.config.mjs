@@ -28,6 +28,7 @@ const baseTypeScriptConfig = {
     "@typescript-eslint": tseslint
   },
   rules: {
+    "no-undef": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/consistent-type-imports": "error",
     "@typescript-eslint/no-explicit-any": "error"
