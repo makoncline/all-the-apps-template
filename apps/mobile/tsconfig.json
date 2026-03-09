@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "types": ["react", "react-native", "nativewind/types"]
+  },
+  "include": ["index.ts", "src/**/*.ts", "src/**/*.tsx", "nativewind-env.d.ts"]
+}

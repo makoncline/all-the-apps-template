@@ -1,0 +1,52 @@
+services:
+  web:
+    image: ghcr.io/owner/hello-monorepo-web:${WEB_IMAGE_TAG}
+    env_file:
+      - ../../apps/web/.env.production
+    restart: unless-stopped
+    depends_on:
+      - server
+
+  server:
+    image: ghcr.io/owner/hello-monorepo-server:${SERVER_IMAGE_TAG}
+    env_file:
+      - ../../apps/server/.env.production
+    environment:
+      DATABASE_URL: file:/data/app.db
+      NODE_ENV: production
+      PORT: 3001
+    volumes:
+      - app-data:/data
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2.8
+    volumes:
+      - ../caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - web
+      - server
+      - deploy-hook
+    restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared:2025.2.1
+    command: tunnel --config /etc/cloudflared/config.yml run
+    volumes:
+      - ../cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+    restart: unless-stopped
+    depends_on:
+      - caddy
+
+  deploy-hook:
+    image: ghcr.io/owner/hello-monorepo-deploy-hook:${DEPLOY_HOOK_IMAGE_TAG}
+    env_file:
+      - ../../infra/deploy/.env.production
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ../docker:/workspace/infra/docker
+      - app-data:/data
+    restart: unless-stopped
+
+volumes:
+  app-data:

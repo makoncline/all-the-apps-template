@@ -1,0 +1,16 @@
+{
+  "name": "@hello/desktop",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./dist/main.js",
+  "scripts": {
+    "dev": "tsc -p tsconfig.json && ELECTRON_RENDERER_URL=${ELECTRON_RENDERER_URL:-http://localhost:3000} electron dist/main.js",
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src --ext .ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "devDependencies": {
+    "electron": "^36.0.0"
+  }
+}

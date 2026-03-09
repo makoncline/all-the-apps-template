@@ -1,0 +1,19 @@
+{
+  auto_https off
+}
+
+app.example.com {
+  reverse_proxy web:3000
+}
+
+api.example.com {
+  reverse_proxy server:3001
+}
+
+mcp.example.com {
+  reverse_proxy server:3001
+}
+
+deploy.example.com {
+  reverse_proxy deploy-hook:8787
+}

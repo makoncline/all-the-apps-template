@@ -1,0 +1,13 @@
+tunnel: YOUR_TUNNEL_ID
+credentials-file: /etc/cloudflared/YOUR_TUNNEL_ID.json
+
+ingress:
+  - hostname: app.example.com
+    service: http://caddy:80
+  - hostname: api.example.com
+    service: http://caddy:80
+  - hostname: mcp.example.com
+    service: http://caddy:80
+  - hostname: deploy.example.com
+    service: http://caddy:80
+  - service: http_status:404
