@@ -69,4 +69,12 @@ Local development uses a local libSQL/SQLite file. The repo uses the Turso/libSQ
 
 - Implementation summary: [`docs/implementation-plan.md`](/Users/makon/dev/test-monorepo/docs/implementation-plan.md)
 - VPS deployment skill: [`skills/deploy-vps/SKILL.md`](/Users/makon/dev/test-monorepo/skills/deploy-vps/SKILL.md)
+- Template feedback skill: [`skills/template-feedback/SKILL.md`](/Users/makon/dev/test-monorepo/skills/template-feedback/SKILL.md)
 - Infra scaffolding: [`infra/docker/compose.prod.yml`](/Users/makon/dev/test-monorepo/infra/docker/compose.prod.yml), [`infra/caddy/Caddyfile`](/Users/makon/dev/test-monorepo/infra/caddy/Caddyfile), [`infra/cloudflared/config.yml`](/Users/makon/dev/test-monorepo/infra/cloudflared/config.yml), [`infra/deploy/deploy-hook.ts`](/Users/makon/dev/test-monorepo/infra/deploy/deploy-hook.ts)
+
+## Template feedback
+
+If you build on top of this repo and make a reusable improvement to the base scaffolding, file it upstream in `makoncline/all-the-apps-template` so the template can absorb it:
+
+- New issue: `https://github.com/makoncline/all-the-apps-template/issues/new`
+- Agent instruction: [`skills/template-feedback/SKILL.md`](/Users/makon/dev/test-monorepo/skills/template-feedback/SKILL.md)
