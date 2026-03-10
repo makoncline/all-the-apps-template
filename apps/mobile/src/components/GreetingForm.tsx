@@ -1,8 +1,18 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useTransition } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { View } from "react-native";
 
-import { greetingsApi } from "../lib/api";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Text } from "@/components/ui/text";
+import { greetingsApi } from "@/lib/api";
 
 export const GreetingForm = () => {
   const queryClient = useQueryClient();
@@ -20,36 +30,39 @@ export const GreetingForm = () => {
   const isSubmitting = createGreetingMutation.isPending || isPendingTransition;
 
   return (
-    <View className="rounded-[28px] bg-white p-5 shadow-sm">
-      <Text className="text-sm font-medium text-slate-700">Add a greeting</Text>
-      <TextInput
-        className="mt-3 h-12 rounded-2xl border border-slate-200 bg-slate-50 px-4 text-base"
-        onChangeText={setName}
-        placeholder="Type a name"
-        value={name}
-      />
-      <Pressable
-        className={`mt-3 h-12 items-center justify-center rounded-2xl ${
-          isSubmitting || name.trim().length === 0 ? "bg-slate-300" : "bg-slate-900"
-        }`}
-        disabled={isSubmitting || name.trim().length === 0}
-        onPress={() => {
-          startTransition(() => {
-            createGreetingMutation.mutate(name);
-          });
-        }}
-      >
-        <Text className="text-sm font-semibold text-white">
-          {isSubmitting ? "Saving..." : "Create greeting"}
-        </Text>
-      </Pressable>
-      {createGreetingMutation.isError ? (
-        <Text className="mt-3 text-sm text-red-700">
-          {createGreetingMutation.error instanceof Error
-            ? createGreetingMutation.error.message
-            : "Could not create greeting."}
-        </Text>
-      ) : null}
-    </View>
+    <Card>
+      <CardHeader>
+        <CardTitle>Add a greeting</CardTitle>
+        <CardDescription>
+          Create a shared greeting through the server-backed API.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <View className="gap-4">
+          <Input
+            onChangeText={setName}
+            placeholder="Type a name"
+            value={name}
+          />
+          <Button
+            disabled={isSubmitting || name.trim().length === 0}
+            onPress={() => {
+              startTransition(() => {
+                createGreetingMutation.mutate(name);
+              });
+            }}
+          >
+            <Text>{isSubmitting ? "Saving..." : "Create greeting"}</Text>
+          </Button>
+          {createGreetingMutation.isError ? (
+            <Text className="text-sm text-destructive">
+              {createGreetingMutation.error instanceof Error
+                ? createGreetingMutation.error.message
+                : "Could not create greeting."}
+            </Text>
+          ) : null}
+        </View>
+      </CardContent>
+    </Card>
   );
 };

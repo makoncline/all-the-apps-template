@@ -1,12 +1,13 @@
 import { app, BrowserWindow } from "electron";
 
 import { preloadPath, rendererUrl } from "./constants";
+import { desktopWindowBackground } from "./generated/theme";
 
 const createMainWindow = async () => {
   const mainWindow = new BrowserWindow({
     width: 1280,
     height: 900,
-    backgroundColor: "#eef2eb",
+    backgroundColor: desktopWindowBackground,
     webPreferences: {
       preload: preloadPath,
       contextIsolation: true,

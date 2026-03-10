@@ -21,7 +21,7 @@ export default (): ExpoConfig => {
     version: "1.0.0",
     orientation: "portrait",
     platforms: ["ios"],
-    userInterfaceStyle: "light",
+    userInterfaceStyle: "automatic",
     scheme: isPreview ? "hello-monorepo-preview" : "hello-monorepo-dev",
     runtimeVersion: {
       policy: "appVersion"

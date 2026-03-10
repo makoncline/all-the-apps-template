@@ -15,6 +15,10 @@ const surfaceMap = {
     pkg: "@hello/mobile",
     defaultCommand: "dev"
   },
+  ui: {
+    pkg: "@hello/ui-tokens",
+    defaultCommand: null
+  },
   cli: {
     pkg: "@hello/cli",
     defaultCommand: null

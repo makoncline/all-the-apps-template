@@ -4,7 +4,18 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useTransition } from "react";
 import type { FormEvent } from "react";
 
-import { greetingsApi } from "../lib/api";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { greetingsApi } from "@/lib/api";
 
 export const GreetingForm = () => {
   const queryClient = useQueryClient();
@@ -30,37 +41,43 @@ export const GreetingForm = () => {
   };
 
   return (
-    <form
-      className="rounded-[2rem] border border-white/70 bg-white/80 p-6 shadow-[0_18px_60px_rgba(31,42,31,0.08)] backdrop-blur"
-      onSubmit={handleSubmit}
-    >
-      <label className="block text-sm font-medium text-ink/80" htmlFor="name">
-        Add a greeting
-      </label>
-      <div className="mt-3 flex flex-col gap-3 sm:flex-row">
-        <input
-          id="name"
-          className="h-12 flex-1 rounded-2xl border border-ink/10 bg-sun px-4 text-base outline-none transition focus:border-leaf focus:ring-2 focus:ring-leaf/30"
-          name="name"
-          onChange={(event) => setName(event.target.value)}
-          placeholder="Type a name"
-          value={name}
-        />
-        <button
-          className="h-12 rounded-2xl bg-ink px-5 text-sm font-semibold text-white transition hover:bg-[#172017] disabled:cursor-not-allowed disabled:bg-ink/40"
-          disabled={isSubmitting || name.trim().length === 0}
-          type="submit"
-        >
-          {isSubmitting ? "Saving..." : "Create greeting"}
-        </button>
-      </div>
-      {createGreetingMutation.isError ? (
-        <p className="mt-3 text-sm text-red-700">
-          {createGreetingMutation.error instanceof Error
-            ? createGreetingMutation.error.message
-            : "Could not create greeting."}
-        </p>
-      ) : null}
-    </form>
+    <Card>
+      <CardHeader>
+        <CardTitle>Add a greeting</CardTitle>
+        <CardDescription>
+          Create a shared greeting through the server-backed API.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <div className="space-y-2">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              id="name"
+              name="name"
+              onChange={(event) => setName(event.target.value)}
+              placeholder="Type a name"
+              value={name}
+            />
+          </div>
+          <Button
+            disabled={isSubmitting || name.trim().length === 0}
+            type="submit"
+          >
+            {isSubmitting ? "Saving..." : "Create greeting"}
+          </Button>
+          {createGreetingMutation.isError ? (
+            <Alert variant="destructive">
+              <AlertTitle>Could not create greeting</AlertTitle>
+              <AlertDescription>
+                {createGreetingMutation.error instanceof Error
+                  ? createGreetingMutation.error.message
+                  : "Request failed."}
+              </AlertDescription>
+            </Alert>
+          ) : null}
+        </form>
+      </CardContent>
+    </Card>
   );
 };

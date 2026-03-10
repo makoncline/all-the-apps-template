@@ -1,11 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "./theme.css";
 
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
+}
+
+html {
+  @apply bg-background text-foreground antialiased;
 }
 
 body {
-  @apply min-h-screen bg-[radial-gradient(circle_at_top,_#fff7df,_#e8f1e7_45%,_#d7e5d2_100%)] text-ink;
+  @apply min-h-screen bg-background text-foreground;
 }

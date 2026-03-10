@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = ({ children }: LayoutProps<"/">) => (
-  <html lang="en">
+  <html lang="en" suppressHydrationWarning>
     <body>
       <Providers>{children as React.ReactNode}</Providers>
     </body>
