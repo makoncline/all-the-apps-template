@@ -18,7 +18,7 @@ const AppContent = () => {
       <View className="flex-1 gap-6 px-5 py-6">
         <View className="gap-3">
           <Text className="text-xs font-semibold uppercase tracking-[3px] text-muted-foreground">
-            Hello Monorepo
+            All the Apps Template
           </Text>
           <Text className="text-4xl font-semibold text-foreground">
             Shared greetings on iOS through the same server and SDK.

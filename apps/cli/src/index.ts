@@ -10,7 +10,7 @@ loadEnv({ path: "apps/cli/.env", override: false });
 
 const program = new Command();
 
-program.name("hello").description("Hello Monorepo CLI").version("0.0.0");
+program.name("hello").description("All the Apps Template CLI").version("0.0.0");
 
 program
   .command("create")

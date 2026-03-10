@@ -1,16 +1,16 @@
 # Implementation Plan Summary
 
-This repo is a `pnpm` + `turbo` monorepo with one shared greetings vertical slice across contracts, core logic, DB access, server routes, SDK, and clients.
+This repo is a local-first TypeScript app platform with one shared greetings vertical slice across contracts, core logic, DB access, server routes, SDK, and multiple surfaces.
 
 ## Current shape
 
-- Shared contracts live in `packages/contracts`
-- Pure use-cases live in `packages/core`
-- Drizzle + local libSQL/SQLite access live in `packages/db`
-- Hono REST + MCP live in `apps/server`
-- Typed HTTP client lives in `packages/sdk`
-- Web, mobile, desktop, and CLI clients all depend on the shared SDK
-- Production scaffolding lives under `infra/` and `.github/workflows/`
+- `packages/contracts`: transport-safe schemas and DTOs
+- `packages/core`: pure business logic with no framework/runtime dependency
+- `packages/db`: Drizzle schema, migrations, and local libSQL/SQLite persistence
+- `apps/server`: Hono REST API plus MCP transport
+- `packages/sdk`: typed HTTP client used by every remote caller
+- `apps/web`, `apps/mobile`, `apps/desktop`, `apps/cli`: surface-specific shells over the shared SDK
+- `infra/` and `.github/workflows/`: production scaffolding for the VPS deployment path
 
 ## Local-first design
 

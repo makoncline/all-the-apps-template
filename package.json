@@ -1,5 +1,5 @@
 {
-  "name": "hello-monorepo",
+  "name": "all-the-apps-template",
   "private": true,
   "packageManager": "pnpm@10.6.0",
   "engines": {

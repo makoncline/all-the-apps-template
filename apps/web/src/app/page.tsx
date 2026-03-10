@@ -5,7 +5,7 @@ const HomePage = () => (
   <main className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-10 px-6 py-12">
     <section className="space-y-4">
       <p className="inline-flex rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-        Hello Monorepo
+        All the Apps Template
       </p>
       <h1 className="max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
         One greetings slice shared across web, mobile, desktop, CLI, and MCP.

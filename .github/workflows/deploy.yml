@@ -34,7 +34,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/hello-monorepo-web:${{ github.event.workflow_run.head_sha }}
+          tags: ghcr.io/${{ github.repository_owner }}/all-the-apps-template-web:${{ github.event.workflow_run.head_sha }}
           file: ./apps/web/Dockerfile
 
       - name: Build and push server image
@@ -42,7 +42,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/hello-monorepo-server:${{ github.event.workflow_run.head_sha }}
+          tags: ghcr.io/${{ github.repository_owner }}/all-the-apps-template-server:${{ github.event.workflow_run.head_sha }}
           file: ./apps/server/Dockerfile
 
       - name: Build and push deploy hook image
@@ -50,7 +50,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/hello-monorepo-deploy-hook:${{ github.event.workflow_run.head_sha }}
+          tags: ghcr.io/${{ github.repository_owner }}/all-the-apps-template-deploy-hook:${{ github.event.workflow_run.head_sha }}
           file: ./infra/deploy/Dockerfile
 
       - name: Notify deploy hook

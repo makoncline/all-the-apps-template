@@ -16,7 +16,7 @@ export default (): ExpoConfig => {
   const plugins = isPreview ? ["expo-updates"] : ["expo-dev-client", "expo-updates"];
 
   return {
-    name: isPreview ? "Hello Monorepo Preview" : "Hello Monorepo Dev",
+    name: isPreview ? "All the Apps Template Preview" : "All the Apps Template Dev",
     slug: "hello-monorepo",
     version: "1.0.0",
     orientation: "portrait",

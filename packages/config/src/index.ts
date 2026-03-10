@@ -1,1 +1,1 @@
-export const workspaceName = "hello-monorepo";
+export const workspaceName = "all-the-apps-template";

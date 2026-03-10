@@ -23,7 +23,7 @@ export const createMcpRoutes = (container: AppContainer) => {
 
   app.all("/", async (c) => {
     const server = new McpServer({
-      name: "hello-monorepo-mcp",
+      name: "all-the-apps-template-mcp",
       version: "0.0.0"
     });
 

@@ -1,44 +1,66 @@
-# Hello Monorepo
+# All the Apps Template
 
-Hello Monorepo is a local-first TypeScript monorepo that shares one application core across web, mobile, desktop, CLI, and MCP surfaces.
+A local-first TypeScript monorepo for building one app across web, mobile, desktop, CLI, and MCP. Shared contracts, business logic, DB access, and a typed SDK live in one place; each surface adds only its runtime-specific shell.
 
-## Stack
+The point of this repo is not "all the apps." The point is one durable domain model with many surfaces on top.
 
-- `pnpm` workspace + `turbo`
-- Strict TypeScript
-- Shared packages for contracts, core logic, DB access, SDK, and config
-- Server: Hono
-- Database: local libSQL/SQLite via the Turso/libSQL client
-- ORM + migrations: Drizzle
-- Web: Next.js + Tailwind CSS + TanStack Query
-- Mobile: Expo + NativeWind + TanStack Query
-- Desktop: Electron shell around the web app
-- CLI: Node CLI using the shared SDK over HTTP
+## Architecture
 
-## Apps and packages
+```text
+packages/contracts  -> transport-safe schemas and DTOs
+packages/core       -> pure business logic
+packages/db         -> persistence implementation
+apps/server         -> HTTP + MCP transport over core/db
+packages/sdk        -> typed client for remote callers
+apps/*              -> surface-specific UI or runtime glue
+```
 
-- `packages/contracts`: shared Zod schemas and DTO types
-- `packages/core`: framework-free greetings use-cases
-- `packages/db`: Drizzle schema, migrations, and libSQL/SQLite repository
-- `packages/sdk`: typed HTTP client used by all clients
-- `apps/server`: Hono REST API and MCP endpoint
-- `apps/web`: Next.js UI
-- `apps/mobile`: Expo UI
-- `apps/desktop`: Electron shell
-- `apps/cli`: Node CLI
+Current vertical slice:
 
-## Local development
+```text
+contracts -> core -> db -> server/mcp -> sdk -> web/mobile/desktop/cli
+```
 
-Core bootstrap:
+## Boundaries
+
+Use these boundaries to keep the template from drifting:
+
+| Path | Put this here | Keep this out |
+| --- | --- | --- |
+| `packages/contracts` | Zod schemas, DTOs, transport-safe types | Business logic, DB access, framework code |
+| `packages/core` | Pure use-cases and domain rules | HTTP, React, persistence details |
+| `packages/db` | Drizzle schema, migrations, repositories, libSQL wiring | UI concerns, transport code |
+| `apps/server` | Hono routes, MCP tool registration, container wiring | Client UI logic |
+| `packages/sdk` | Typed client transport wrapper for server APIs | UI state, server-only code |
+| `apps/web` | Web UI | Shared domain logic duplicated from `packages/core` |
+| `apps/mobile` | Native mobile UI | Server or DB implementation details |
+| `apps/desktop` | Electron shell around the web app | Separate desktop-only domain layer unless truly required |
+| `apps/cli` | Command-line UX | Duplicate API/client logic |
+
+## Support Matrix
+
+| Surface | Status | Notes | Entry command |
+| --- | --- | --- | --- |
+| Server | First-class | Hono API backed by local libSQL/SQLite | `pnpm server` |
+| MCP | First-class | Tool-only MCP surface exposed by the server | `pnpm server` |
+| Web | First-class | Next.js app calling the server through the shared SDK | `pnpm web dev` |
+| iOS | First-class | Expo native UI over the shared SDK | `pnpm ios dev` |
+| Desktop | Supported | Electron shell around the web app, not a separate UI stack | `pnpm mac dev` |
+| CLI | Supported | Node CLI using the shared SDK over HTTP | `pnpm cli list` |
+| Android | Partial | Expo command exists, but root command routing/docs are iOS-first today | `pnpm --filter @hello/mobile android` |
+
+## Local Development
+
+Bootstrap:
 
 - `pnpm install`
 - `pnpm db:generate`
 - `pnpm db:migrate`
 - `pnpm dev`
 
-`pnpm dev` starts the server and web app.
+`pnpm dev` starts the server and web app. Other surfaces run against the same local server.
 
-Surface commands:
+Common commands:
 
 - `pnpm server`
 - `pnpm web dev|build`
@@ -46,35 +68,41 @@ Surface commands:
 - `pnpm ios dev|dev:device|preview|preview:device|ota:preview`
 - `pnpm cli list|health|create --name "..."`
 
-Relevant code paths:
+## Why Local-First
 
-- root command router: [`scripts/run-surface.mjs`](/Users/makon/dev/test-monorepo/scripts/run-surface.mjs)
-- root script entrypoints: [`package.json`](/Users/makon/dev/test-monorepo/package.json)
-- server routes and MCP wiring: [`apps/server/src/app.ts`](/Users/makon/dev/test-monorepo/apps/server/src/app.ts), [`apps/server/src/mcp/index.ts`](/Users/makon/dev/test-monorepo/apps/server/src/mcp/index.ts)
-- iOS variant config and OTA channel wiring: [`apps/mobile/app.config.ts`](/Users/makon/dev/test-monorepo/apps/mobile/app.config.ts)
-- iOS package-owned commands: [`apps/mobile/package.json`](/Users/makon/dev/test-monorepo/apps/mobile/package.json)
-- Expo project/build metadata: [`apps/mobile/eas.json`](/Users/makon/dev/test-monorepo/apps/mobile/eas.json)
-- mobile env shape: [`apps/mobile/.env.example`](/Users/makon/dev/test-monorepo/apps/mobile/.env.example)
-- web entrypoints and build config: [`apps/web/src/app/page.tsx`](/Users/makon/dev/test-monorepo/apps/web/src/app/page.tsx), [`apps/web/package.json`](/Users/makon/dev/test-monorepo/apps/web/package.json), [`apps/web/tsconfig.typecheck.json`](/Users/makon/dev/test-monorepo/apps/web/tsconfig.typecheck.json), [`apps/web/eslint.config.mjs`](/Users/makon/dev/test-monorepo/apps/web/eslint.config.mjs)
+- Local development uses libSQL/SQLite through the Turso/libSQL client.
+- No cloud database is required for local development.
+- Repo-local data lives under [`data/`](data/); commit only [`data/.gitkeep`](data/.gitkeep).
+- The default local DB file is `data/local.db`.
 
-## Local database
+## Code Map
 
-Local development uses a local libSQL/SQLite file. The repo uses the Turso/libSQL client locally and does not require any cloud database service for local development.
+- Root command router: [`scripts/run-surface.mjs`](scripts/run-surface.mjs)
+- Root scripts: [`package.json`](package.json)
+- Implementation summary: [`docs/implementation-plan.md`](docs/implementation-plan.md)
+- Contracts: [`packages/contracts`](packages/contracts)
+- Core logic: [`packages/core`](packages/core)
+- DB layer: [`packages/db`](packages/db)
+- SDK: [`packages/sdk`](packages/sdk)
+- Server entrypoints: [`apps/server/src/app.ts`](apps/server/src/app.ts), [`apps/server/src/mcp/index.ts`](apps/server/src/mcp/index.ts)
+- Web app: [`apps/web`](apps/web)
+- Mobile config: [`apps/mobile/app.config.ts`](apps/mobile/app.config.ts), [`apps/mobile/package.json`](apps/mobile/package.json)
+- Desktop shell: [`apps/desktop`](apps/desktop)
+- CLI: [`apps/cli`](apps/cli)
+- Infra: [`infra/docker/compose.prod.yml`](infra/docker/compose.prod.yml), [`infra/caddy/Caddyfile`](infra/caddy/Caddyfile), [`infra/cloudflared/config.yml`](infra/cloudflared/config.yml), [`infra/deploy/deploy-hook.ts`](infra/deploy/deploy-hook.ts)
 
-- Repo-local development data lives under [`data/`](/Users/makon/dev/test-monorepo/data)
-- Commit only [`data/.gitkeep`](/Users/makon/dev/test-monorepo/data/.gitkeep)
-- The local DB file is expected at `data/local.db`
+## Production Direction
 
-## Deployment docs
+The production path is a VPS-oriented deployment story, not just a local demo:
 
-- Implementation summary: [`docs/implementation-plan.md`](/Users/makon/dev/test-monorepo/docs/implementation-plan.md)
-- VPS deployment skill: [`skills/deploy-vps/SKILL.md`](/Users/makon/dev/test-monorepo/skills/deploy-vps/SKILL.md)
-- Template feedback skill: [`skills/template-feedback/SKILL.md`](/Users/makon/dev/test-monorepo/skills/template-feedback/SKILL.md)
-- Infra scaffolding: [`infra/docker/compose.prod.yml`](/Users/makon/dev/test-monorepo/infra/docker/compose.prod.yml), [`infra/caddy/Caddyfile`](/Users/makon/dev/test-monorepo/infra/caddy/Caddyfile), [`infra/cloudflared/config.yml`](/Users/makon/dev/test-monorepo/infra/cloudflared/config.yml), [`infra/deploy/deploy-hook.ts`](/Users/makon/dev/test-monorepo/infra/deploy/deploy-hook.ts)
+- GHCR-built images via GitHub Actions
+- Docker Compose under [`infra/docker/compose.prod.yml`](infra/docker/compose.prod.yml)
+- Caddy for edge routing
+- Cloudflare Tunnel support
+- Deploy hook scaffolding under [`infra/deploy`](infra/deploy)
 
-## Template feedback
+## Template Notes
 
-If you build on top of this repo and make a reusable improvement to the base scaffolding, file it upstream in `makoncline/all-the-apps-template` so the template can absorb it:
-
-- New issue: `https://github.com/makoncline/all-the-apps-template/issues/new`
-- Agent instruction: [`skills/template-feedback/SKILL.md`](/Users/makon/dev/test-monorepo/skills/template-feedback/SKILL.md)
+- Desktop is intentionally a packaged web surface. If you need a truly separate desktop UI, treat that as a new surface, not a claim the template already makes.
+- This repo is designed so you can delete surfaces you do not need and keep the shared packages intact.
+- If you make a reusable improvement to the template, file it upstream: `https://github.com/makoncline/all-the-apps-template/issues/new`
