@@ -36,5 +36,10 @@
     "turbo": "^2.5.0",
     "typescript": "^5.8.2",
     "vitest": "^3.0.8"
+  },
+  "pnpm": {
+    "overrides": {
+      "sharp": "0.35.5"
+    }
   }
 }
