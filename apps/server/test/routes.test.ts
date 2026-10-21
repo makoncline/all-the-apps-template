@@ -91,4 +91,48 @@ describe("server routes", () => {
       }
     });
   });
+
+  it("executes an MCP tool with a normal request", async () => {
+    const response = await app.request("/mcp", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        accept: "application/json, text/event-stream"
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0", id: 1, method: "tools/call",
+        params: { name: "create_greeting", arguments: { name: "Makon" } }
+      })
+    });
+    const text = await response.text();
+    const payload = JSON.parse(text.match(/^data: (.+)$/m)?.[1] ?? text);
+    expect(response.status).toBe(200);
+    expect(payload.result.isError).not.toBe(true);
+    expect(JSON.stringify(payload.result)).toContain("Hello, Makon!");
+  });
+
+  it("rejects oversized MCP bodies and excessive argument structure", async () => {
+    const headers = {
+      "content-type": "application/json",
+      accept: "application/json, text/event-stream"
+    };
+    const tooLarge = await app.request("/mcp", {
+      method: "POST", headers,
+      body: JSON.stringify({ padding: "x".repeat(65 * 1024) })
+    });
+    expect(tooLarge.status).toBe(413);
+
+    const tooMany = await app.request("/mcp", {
+      method: "POST", headers,
+      body: JSON.stringify({
+        jsonrpc: "2.0", id: 2, method: "tools/call",
+        params: { name: "create_greeting", arguments: { name: "Makon", extra: Array(1_001).fill(null) } }
+      })
+    });
+    const text = await tooMany.text();
+    const payload = JSON.parse(text.match(/^data: (.+)$/m)?.[1] ?? text);
+    expect(payload.result.isError).toBe(true);
+    expect(JSON.stringify(payload.result)).toMatch(/limit|complex|elements/i);
+  });
+
 });

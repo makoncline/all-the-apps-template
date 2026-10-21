@@ -11,7 +11,7 @@
     "@hello/core": "workspace:*",
     "@libsql/client": "^0.15.5",
     "dotenv": "^16.4.7",
-    "drizzle-orm": "^0.41.0"
+    "drizzle-orm": "^0.45.2"
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.0",

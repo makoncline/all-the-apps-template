@@ -25,7 +25,7 @@ export const createMcpRoutes = (container: AppContainer) => {
     const server = new McpServer({
       name: "all-the-apps-template-mcp",
       version: "0.0.0"
-    });
+    }, { maxToolInputElements: 1_000 });
 
     const createGreetingTool = createGreetingToolDefinition(container);
     const listGreetingsTool = listGreetingsToolDefinition(container);
@@ -65,7 +65,9 @@ export const createMcpRoutes = (container: AppContainer) => {
       }
     );
 
-    const transport = new WebStandardStreamableHTTPServerTransport();
+    const transport = new WebStandardStreamableHTTPServerTransport({
+      maxRequestBodySize: 64 * 1024
+    });
     await server.connect(transport);
 
     return transport.handleRequest(c.req.raw);
